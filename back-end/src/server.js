@@ -35,17 +35,35 @@ async function startConnectionMongoDB(){
     
     //Note id is stored in req
     //Add product in cart
-    app.post('/cart', (req,res)=>{
+    app.post('/users/:userId/cart', async (req,res)=>{
+        const userId = req.params.userId;
         const productId = req.body.id;
-        cartItems.push(productId);
-        const populatedCart = populateCartFromIds(cartItems);
+
+        //Add product to users cart
+        await db.collection('User').updateOne({id: userId},{
+            //addToSet prevents duplicates, Push does not
+            $addToSet: {cartItems: productId}
+        });
+
+        //Populate users cart
+        const user = await db.collection('User').findOne({id: req.params.userId })
+        const populatedCart = await populateCartFromIds(user.cartItems);
         res.json(populatedCart);
     });
     
-    app.delete('/cart/:productId', (req,res)=>{
-        const productId = req.params.productId;
-        cartItems = cartItems.filter(id => id !== productId);
-        const populatedCart = populateCartFromIds(cartItems)
+    app.delete('/users/:userId/cart/:productId', async (req,res)=>{
+        const userId = req.params.userId;
+        const productId = req.params.productId
+        //Add product to users cart
+        await db.collection('User').updateOne({id: userId},{
+            //addToSet prevents duplicates, Push does not
+            $pull: {cartItems: productId}
+        });
+
+
+        //Populate users cart
+        const user = await db.collection('User').findOne({id: req.params.userId })
+        const populatedCart = await populateCartFromIds(user.cartItems);
         res.json(populatedCart);
     });
     
