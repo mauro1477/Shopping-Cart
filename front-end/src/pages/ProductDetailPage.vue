@@ -1,7 +1,7 @@
 <template>
 	<div v-if="product">
 		<div class="img-wrap">
-	  	<img :src="product.imageName" alt="">	
+	  	<img :src="product.imageUrl" alt="">	
   	</div>
 		<div class="product-details">
 			<h1>{{ product.name }}</h1>
