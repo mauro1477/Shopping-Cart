@@ -97,6 +97,7 @@ h1 {
 }
 
 .grey-button {
+  margin-top: 16px;
   background-color: #888;
   width: 100%;
 }
