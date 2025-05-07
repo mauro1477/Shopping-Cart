@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { cartItems } from '@/temp-data';
+import axios from 'axios';
 import CartList from '../components/CartList.vue';
 export default{
   name: "ShoppingCartPage",
@@ -19,8 +19,12 @@ export default{
   },
   data(){
 	return {
-		cartItems: cartItems
+		cartItems: []
 	}
+  },
+  async created() {
+	const response = await axios.get('/api/users/1234/cart');
+	this.cartItems = response.data;
   }
 }
 </script>

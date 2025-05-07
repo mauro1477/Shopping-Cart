@@ -1,6 +1,6 @@
 import express from 'express';
 import  { MongoClient, ServerApiVersion } from 'mongodb';
-
+import path from 'path';
 async function startConnectionMongoDB(){
     const url = `mongodb+srv://maurovargas7725:Z6RA6StPd0VXmDjG@cluster0.xowngpg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
     // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -12,30 +12,31 @@ async function startConnectionMongoDB(){
     const app = express();
     
     app.use(express.json());
-    
+    app.use('/images', express.static(path.join(__dirname, '../assets')));
+
     async function populateCartFromIds(ids){
         return Promise.all(ids.map(id => db.collection('products').findOne({id})));
     }
     
-    app.get('/users/:userId/cart', async (req, res)=>{
+    app.get('/api/users/:userId/cart', async (req, res)=>{
         const user = await db.collection('User').findOne({id: req.params.userId })
         const populatedCart = await populateCartFromIds(user.cartItems);
         res.json(populatedCart);
     });
     
-    app.get('/products', async (req, res)=>{
+    app.get('/api/products', async (req, res)=>{
         const products = await db.collection('products').find({}).toArray();
-        res.send(products);
+        res.json(products);
     });
     
-    app.get('/products/:productId', async (req, res)=>{
+    app.get('/api/products/:productId', async (req, res)=>{
         const product = await db.collection('products').findOne({id:req.params.productId});
         return res.json(product);
     });
     
     //Note id is stored in req
     //Add product in cart
-    app.post('/users/:userId/cart', async (req,res)=>{
+    app.post('/api/users/:userId/cart', async (req,res)=>{
         const userId = req.params.userId;
         const productId = req.body.id;
 
@@ -51,7 +52,7 @@ async function startConnectionMongoDB(){
         res.json(populatedCart);
     });
     
-    app.delete('/users/:userId/cart/:productId', async (req,res)=>{
+    app.delete('/api/users/:userId/cart/:productId', async (req,res)=>{
         const userId = req.params.userId;
         const productId = req.params.productId
         //Add product to users cart

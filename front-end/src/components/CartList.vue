@@ -3,7 +3,7 @@
 		     v-for="product in cartItems"
 		     :key="product.id"
 		     >
-				<img class="product-image" :src="product.imageName" alt="">
+				<img class="product-image" :src="product.imageUrl" alt="">
 				<div class="detail-wrap">
 					<h3>{{ product.name }}</h3>
 					<p>{{ product.price }}</p>
