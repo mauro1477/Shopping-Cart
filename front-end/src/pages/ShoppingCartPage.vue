@@ -14,6 +14,7 @@ import axios from 'axios';
 import CartList from '../components/CartList.vue';
 export default{
   name: "ShoppingCartPage",
+  props: ["user"],
   components:{
 	'cart-list' : CartList
   },

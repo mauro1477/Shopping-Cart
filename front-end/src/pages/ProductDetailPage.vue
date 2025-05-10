@@ -6,9 +6,9 @@
 		<div class="product-details">
 			<h1>{{ product.name }}</h1>
 			<h3 class="price">{{ product.price }}</h3>
-			<button @click="addToCart" class="add-to-cart" v-if="!isItemInCart">Add to Cart</button>
-			<button class="grey-button" v-else>Item is already in cart</button>
-			<button @click="signIn" class="sign-in">Sign in to add to cart</button>
+			<button @click="addToCart" class="add-to-cart" v-if="user && !isItemInCart">Add to Cart</button>
+			<button class="grey-button" v-if="user && isItemInCart">Item is already in cart</button>
+			<button @click="signIn" class="sign-in" v-if="!user">Sign in to add to cart</button>
 		</div>
 	</div>
 	<div v-else>
@@ -26,10 +26,19 @@ export default{
   components:{
 	PageNotFound
   },
+  props: ["user"],
   data(){
 	return{
-		product : [],
+		product : {},
 		userCartItems : [],
+	}
+  },
+  watch:{
+	async user(newUserValue){
+		if(newUserValue){
+			const responseUserCart =  await axios.get(`/api/users/${newUserValue.uid}/cart`);
+			this.userCartItems = responseUserCart.data;
+		}
 	}
   },
   computed:{
@@ -68,8 +77,10 @@ export default{
 	const product = response.data;
 	this.product = product;
 
-	const responseUserCart =  await axios.get('/api/users/1234/cart');
-	this.userCartItems = responseUserCart.data;
+	if(this.user){
+		const responseUserCart =  await axios.get(`/api/users/${this.user.uid}/cart`);
+		this.userCartItems = responseUserCart.data;
+	}
   }
 }
 </script>

@@ -5,6 +5,7 @@
 <script>
 export default {
   name: 'PageNotFound',
+  props: ["user"],
   date(){
 	return{
 		

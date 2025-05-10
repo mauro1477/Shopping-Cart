@@ -11,6 +11,7 @@ import ProductsList from '../components/ProductsList.vue';
 
 export default{
   name: "Product Page",
+  props: ["user"],
   components:{
 	'products-list': ProductsList
 	},
