@@ -20,7 +20,7 @@ async function startConnectionMongoDB(){
     
     app.get('/api/users/:userId/cart', async (req, res)=>{
         const user = await db.collection('User').findOne({id: req.params.userId })
-        const populatedCart = await populateCartFromIds(user.cartItems);
+        const populatedCart = await populateCartFromIds(user?.cartItems || []);
         res.json(populatedCart);
     });
     
@@ -48,7 +48,7 @@ async function startConnectionMongoDB(){
 
         //Populate users cart
         const user = await db.collection('User').findOne({id: req.params.userId })
-        const populatedCart = await populateCartFromIds(user.cartItems);
+        const populatedCart = await populateCartFromIds(user?.cartItems || []);
         res.json(populatedCart);
     });
     
@@ -64,7 +64,7 @@ async function startConnectionMongoDB(){
 
         //Populate users cart
         const user = await db.collection('User').findOne({id: req.params.userId })
-        const populatedCart = await populateCartFromIds(user.cartItems);
+        const populatedCart = await populateCartFromIds(user?.cartItems || []);
         res.json(populatedCart);
     });
     
