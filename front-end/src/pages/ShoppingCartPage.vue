@@ -23,15 +23,28 @@ export default{
 		cartItems: [],
 	}
   },
+  watch: {
+    async user(newUserValue) {
+      console.log('Changed!');
+      console.log(newUserValue);
+      if (newUserValue) {
+        const cartResponse = await axios.get(`/api/users/${newUserValue.uid}/cart`);
+        const cartItems = cartResponse.data;
+        this.cartItems = cartItems;
+      }
+    }
+  },
   methods: {
 	async removeItemFromCart(productId) {
-		const response = await axios.delete(`/api/users/1234/cart/${productId}`);
+		const response = await axios.delete(`/api/users/${this.user.uid}/cart/${productId}`);
 		this.cartItems = response.data;
 	}
   },
   async created() {
-	const response = await axios.get('/api/users/1234/cart');
-	this.cartItems = response.data;
+	if(this.user){
+		const response = await axios.get(`/api/users/${this.user.uid}/cart`);
+		this.cartItems = response.data;
+	}
   }
 }
 </script>

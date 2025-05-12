@@ -26,29 +26,31 @@ export default{
   components:{
 	PageNotFound
   },
-  props: ["user"],
+  props: ['user'],
   data(){
 	return{
 		product : {},
-		userCartItems : [],
+		cartItems : [],
 	}
   },
   watch:{
 	async user(newUserValue){
+		console.log('Changed!');
+		console.log(newUserValue);
 		if(newUserValue){
 			const responseUserCart =  await axios.get(`/api/users/${newUserValue.uid}/cart`);
-			this.userCartItems = responseUserCart.data;
+			this.cartItems = responseUserCart.data;
 		}
 	}
   },
   computed:{
 	isItemInCart(){
-		return this.userCartItems.some(item => item.id === this.$route.params.productId);
+		return this.cartItems.some(item => item.id === this.$route.params.productId);
 	}
   },
   methods:{
     async addToCart(){
-		await axios.post('/api/users/1234/cart',{ id : this.$route.params.productId });
+		await axios.post(`/api/users/${this.user.uid}/cart`,{ id : this.$route.params.productId });
 		alert('Successfully added item to cart!');
 	},
 	async signIn(){
@@ -79,7 +81,7 @@ export default{
 
 	if(this.user){
 		const responseUserCart =  await axios.get(`/api/users/${this.user.uid}/cart`);
-		this.userCartItems = responseUserCart.data;
+		this.cartItems = responseUserCart.data;
 	}
   }
 }
