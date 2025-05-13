@@ -3,7 +3,7 @@ node_modules/
 front-end/node_modules
 
 # Built files
-dist/
+front-end/dist/
 
 # Environment files
 .env
