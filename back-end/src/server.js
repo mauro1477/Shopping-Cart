@@ -1,6 +1,6 @@
 import express from 'express';
 import  { MongoClient, ServerApiVersion } from 'mongodb';
-import path from 'path';
+import path, { resolve } from 'path';
 async function startConnectionMongoDB(){
     const url = `mongodb+srv://maurovargas7725:Z6RA6StPd0VXmDjG@cluster0.xowngpg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
     // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -13,6 +13,11 @@ async function startConnectionMongoDB(){
     
     app.use(express.json());
     app.use('/images', express.static(path.join(__dirname, '../assets')));
+
+    app.use(express.static(
+        path.resolve(__dirname, '../dist'),
+        { maxAge: '1y', etag: false },
+    ));
 
     async function populateCartFromIds(ids){
         return Promise.all(ids.map(id => db.collection('products').findOne({id})));
@@ -68,8 +73,14 @@ async function startConnectionMongoDB(){
         res.json(populatedCart);
     });
     
-    app.listen(8000,()=>{
-        console.log("Server is listening on port 8000");
+    app.get(/(.*)/, (req, res)=>{
+        res.sendFile(path.join(__dirname, '../dist/index.html'));
+    });
+
+    const port = process.env.PORT || 8000;
+
+    app.listen(port,()=>{
+        console.log("Server is listening on port" + port);
     })
 }
 

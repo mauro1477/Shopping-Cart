@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { products } from '@/temp-data';
 
 export default {
   name: "Products List",

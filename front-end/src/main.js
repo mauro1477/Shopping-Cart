@@ -15,7 +15,7 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-apiKey:`${import.meta.env.VITE_API_BASE_URL}`,
+apiKey: "AIzaSyCArTo7YahvT-zewRPK3l7SvyL9jznHJ-k",
 authDomain: "shopping-cart-44486.firebaseapp.com",
 projectId: "shopping-cart-44486",
 storageBucket: "shopping-cart-44486.firebasestorage.app",
